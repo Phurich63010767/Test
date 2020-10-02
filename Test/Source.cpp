@@ -55,12 +55,17 @@ int main()
 	int x = 38, y = 20;
 	int bx[5], by[5];
 	int i = 0;
-	int bullet = 0;
-	setcursor(0);
+	int bullet[5];
+	setcursor(false);
 	setcolor(2, 7);
 	gotoxy(x, y);
 	draw_ship();
-	do {
+	for (int i = 0; i < 5; i++)
+	{
+		bullet[i] = 0;
+	}
+	do 
+	{
 		setcolor(2, 0);
 		if (_kbhit())
 		{
@@ -79,25 +84,36 @@ int main()
 				gotoxy(++x, y);
 				draw_ship();
 			}
-			if ((ch == 32) && (bullet < 5))
+			if (ch == 32)
 			{
-				bullet++;
-				bx[i] = x + 2;
-				by[i] = y - 1;
+				for (int i = 0; i < 5; i++)
+				{
+					if (bullet[i] == 0)
+					{
+						bullet[i] = 1;
+						bx[i] = x + 2;
+						by[i] = y - 1 ;
+						draw_bullet(bx[i], by[i]);
+						break;
+					}
+				}
 			}
 			fflush(stdin);
 		}
-		if (bullet > 0 && bullet < 6)
+		for (int i = 0; i < 5; i++) 
 		{
-			clear_bullet(bx[i], by[i]);
-			if (by[i] == 0)
-			{
-				bullet--;
-			}
-			else
-			{
-				draw_bullet(bx[i], --by[i]);
-			}
+				if (bullet[i] > 0)
+				{
+					clear_bullet(bx[i], by[i]);
+					if (by[i] == 0)
+					{
+						bullet[i] = 0;
+					}
+					else
+					{
+						draw_bullet(bx[i], --by[i]);
+					}
+				}
 		}
 		Sleep(100);
 	} while (ch != 'x');
